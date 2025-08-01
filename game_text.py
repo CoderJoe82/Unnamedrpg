@@ -41,6 +41,22 @@ GAME_TEXT = {
             }
         ]
     },
+    "error": {
+        "title": "VOID",
+        "description": [
+            {
+                "color": Fore.RED,
+                "text": "You find yourself in a formless, featureless void. A chilling "
+                        "realization dawns upon you: this place should not exist."
+            },
+            {
+                "color": Fore.MAGENTA,
+                "text": "Developer Note: A non-existent location key was requested. "
+                        "Check the value of GAME_STATE['player_location'] or the "
+                        "argument passed to display_scene()."
+            }
+        ]
+    },
     "welcome_screen": {
         "title": "Unnamed RPG",
         "description": [
