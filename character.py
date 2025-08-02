@@ -5,6 +5,8 @@ class Character:
     """
     def __init__(self, name: str,
                  # --- Optional Keyword Arguments for customization ---
+                 race: str = "Unknown",
+                 class_name: str = "Uncalssed",
                  title: str = "The Novice",
                  level: int = 1,
                  experience: int = 0,
@@ -20,7 +22,9 @@ class Character:
         # --- Core Identity ---
         self.name: str = name
         self.title: str = title
-        
+        self.race: str = race
+        self.class_name: str =  class_name
+
         # --- Leveling and Experience ---
         self.level: int = level
         self.experience: int = experience
