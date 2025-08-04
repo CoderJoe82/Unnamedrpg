@@ -3,6 +3,7 @@ character_creation.py
 Handles the step-by-step process of creating a new player character.
 """
 import time
+
 from colorama import Fore, Style
 
 from utility import clear_screen
@@ -10,7 +11,7 @@ from main_menu import display_title
 from character import Character
 
 # --- DATA FOR RACES AND CLASSES (Easily Scalable) ---
-
+# ... (no changes to RACE_DATA or CLASS_DATA) ...
 RACE_DATA = {
     "human" : {
         "name" : "Human",
@@ -47,8 +48,9 @@ CLASS_DATA = {
     }
 }
 
-# --- HELPER FUNCTIONS ---
 
+# --- HELPER FUNCTIONS ---
+# ... (no changes to _present_choice) ...
 def _present_choice(header_title: str, prompt_text: str, options_data: dict) -> str:
     """
     A reusable function to display options and get a valid choice from the user.
@@ -74,7 +76,9 @@ def _present_choice(header_title: str, prompt_text: str, options_data: dict) -> 
         else:
             print(Fore.RED + f"Invalid choice. Please enter a number between 1 and {len(option_keys)}")
 
+
 # --- MAIN CHARACTER CREATION FUNCTION ---
+
 def create_new_character() -> Character:
     """
     The main function that guides the player through character creation.
@@ -91,28 +95,32 @@ def create_new_character() -> Character:
 
     # --- RACE & CLASS ---
     chosen_race_key = _present_choice("CHOOSE YOUR RACE", "Enter the number for your race:", RACE_DATA)
+    # --- RESTORED: Class selection is now active ---
     chosen_class_key = _present_choice("CHOOSE YOUR CLASS", "Enter the number for your class:", CLASS_DATA)
-    
+
     # --- CALCULATE FINAL STATS ---
     base_stats = {
         "strength": 10, "dexterity": 10, "constitution": 10,
         "intelligence": 10, "wisdom": 10, "charisma": 10
     }
-    
+
     # Get the dictionaries of stat modifiers
     race_mods = RACE_DATA[chosen_race_key].get("stat_mods", {})
+    # --- RESTORED: Get class modifiers ---
     class_mods = CLASS_DATA[chosen_class_key].get("stat_mods", {})
 
     # Combine the stats
     final_stats = base_stats.copy()
     for stat, value in race_mods.items():
         final_stats[stat] += value
+    # --- RESTORED: Apply class stat modifiers ---
     for stat, value in class_mods.items():
         final_stats[stat] += value
-        
+
     # --- INSTANTIATE CHARACTER ---
     player = Character(
         name=name,
+        # --- RESTORED: Pass the chosen race and class names ---
         race=RACE_DATA[chosen_race_key]["name"],
         class_name=CLASS_DATA[chosen_class_key]["name"],
         strength=final_stats["strength"],
@@ -122,12 +130,13 @@ def create_new_character() -> Character:
         wisdom=final_stats["wisdom"],
         charisma=final_stats["charisma"]
     )
-    
+
     # --- CONFIRMATION SCREEN ---
     clear_screen()
     display_title("YOUR ADVENTURER IS READY")
     print(f"  Name:       {Style.BRIGHT}{player.name}{Style.RESET_ALL}")
     print(f"  Race:       {Style.BRIGHT}{player.race}{Style.RESET_ALL}")
+    # --- RESTORED: Display the chosen class ---
     print(f"  Class:      {Style.BRIGHT}{player.class_name}{Style.RESET_ALL}\n")
     print(f"  {Fore.GREEN}--- Attributes ---{Style.RESET_ALL}")
     print(f"  Strength:     {player.strength}")
@@ -136,8 +145,7 @@ def create_new_character() -> Character:
     print(f"  Intelligence: {player.intelligence}")
     print(f"  Wisdom:       {player.wisdom}")
     print(f"  Charisma:     {player.charisma}\n")
-    
     print(f"{Fore.CYAN}Your journey is about to begin...{Style.RESET_ALL}")
     time.sleep(5) # Give the player time to read their new stats
-    
+
     return player

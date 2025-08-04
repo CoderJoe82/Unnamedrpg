@@ -13,9 +13,11 @@ from colorama import Fore, Style, init
 
 # Import our game components
 from game_state import GAME_STATE
-from character import Character
+# from character import Character
 from character_state import CHARACTER_STATE
 from main_menu import start_main_menu, display_scene
+from character_creation import create_new_character
+from utility import clear_screen
 
 # --- INITIALIZATION ---
 # This should be the first thing that runs.
@@ -24,26 +26,33 @@ init(autoreset=True)
 # --- GAME LOGIC ---
 def run_game():
     """The main game loop and all logic that happens after the menu."""
-    # --- CHARACTER CREATION & GAME START (Placeholder) ---
-    print(Fore.GREEN + "Starting a new adventure...")
-    time.sleep(2)
-
-    # Placeholder character creation - this is our next big task!
-    CHARACTER_STATE["player"] = Character(name="Hero")
-    GAME_STATE["player_location"] = "golga_city"
+    CHARACTER_STATE['player'] = create_new_character()
+    GAME_STATE['player_location'] = "golga_city"
     
     # --- THE MAIN GAME LOOP ---
     while True:
-        display_scene(GAME_STATE["player_location"])
-        
+        if CHARACTER_STATE['player'] is None:
+            print(Fore.RED + "Error: No player character found. Exiting.")
+            break
+
+        display_scene(GAME_STATE['player_location'])
+                
         print("-" * 50)
         action = input(f"{Fore.CYAN}> {Style.RESET_ALL}").lower().strip()
         
         if action in ["quit", "exit"]:
-            break 
+            break
+
+        elif action in ['stats', 'char', 'character']:
+            clear_screen()
+            player = CHARACTER_STATE['player']
+            player.display_character_sheet()
+            input(f"{Fore.CYAN}Press enter to continue...{Style.RESET_ALL}")
+        
         else:
             print(Fore.YELLOW + "Command not yet implemented. Type 'quit' to exit.")
-            time.sleep(1.5)
+            time.sleep(2)
+
 
 # --- MAIN PROGRAM EXECUTION ---
 if __name__ == "__main__":

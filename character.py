@@ -1,3 +1,5 @@
+from colorama import Fore, Style
+
 class Character:
     """
     Represents a character in the game, holding all their stats,
@@ -50,8 +52,7 @@ class Character:
         # These will always start empty for any new character instance.
         self.inventory: dict = {}
         self.equipment: dict = {
-            "head": None, "chest": None, "legs": None, "feet": None,
-            "main_hand": None, "off_hand": None,
+            "head": None, "chest": None, "shoulders" : None, "wrist" : None, "hands" : None, "belt" : None, "legs": None, "feet": None, "neck" : None, "ring_one" : None, "ring_two" : None, "accessory_one" : None, "accessory_two" : None, "main_hand": None, "off_hand": None,
         }
 
     def __repr__(self) -> str:
@@ -62,6 +63,40 @@ class Character:
         return f"Character(name='{self.name}', level={self.level}, hp={self.current_health}/{self.max_health})"
 
     # --- Basic Methods (Examples for future use) ---
+
+    def display_character_sheet(self):
+        """Prints a well-formatted character sheet to the console."""
+        
+        # --- Helper for creating resource bars (HP/MP) ---
+        def create_bar(current, maximum, color, bar_length=20):
+            percent = float(current) / maximum
+            filled_length = int(bar_length * percent)
+            bar = '█' * filled_length + '-' * (bar_length - filled_length)
+            return f"{color}[{bar}]{Style.RESET_ALL}"
+
+        # --- Start Printing ---
+        print(f"\n{Fore.YELLOW}--- CHARACTER SHEET ---{Style.RESET_ALL}")
+        
+        # Core Info
+        print(f"  {Style.BRIGHT}{self.name}, the {self.title}{Style.RESET_ALL}")
+        print(f"  Level {self.level} {self.race} {self.class_name}")
+        
+        # Resources
+        hp_bar = create_bar(self.current_health, self.max_health, Fore.GREEN)
+        mp_bar = create_bar(self.current_mana, self.max_mana, Fore.BLUE)
+        print(f"\n  Health: {self.current_health:3}/{self.max_health:<3} {hp_bar}")
+        print(f"  Mana:   {self.current_mana:3}/{self.max_mana:<3} {mp_bar}")
+        
+        # Experience
+        print(f"  Exp:    {self.experience} / {self.experience_to_next_level}")
+        
+        # Attributes
+        print(f"\n{Fore.CYAN}--- Attributes ---{Style.RESET_ALL}")
+        print(f"  Strength:     {self.strength:<4}  Intelligence: {self.intelligence:<4}")
+        print(f"  Dexterity:    {self.dexterity:<4}  Wisdom:       {self.wisdom:<4}")
+        print(f"  Constitution: {self.constitution:<4}  Charisma:     {self.charisma:<4}")
+
+        print(f"\n{Fore.YELLOW}-----------------------{Style.RESET_ALL}\n")
 
     def is_alive(self) -> bool:
         """Checks if the character's health is above 0."""
