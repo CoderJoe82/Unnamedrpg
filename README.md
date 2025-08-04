@@ -1,5 +1,9 @@
 # Unnamedrpg
 
+Version 0.0.3
+---
+-Added the ability to pick race and class when creating a character.
+
 Version 0.0.2
 ---
 -Added a main menu(Non-functional except for quit)
